@@ -1,6 +1,6 @@
 from selenium.webdriver.common.by import By
 
-class Locators:
+class LoginLocators:
 
     FIRST_NAME = (By.XPATH, "//input[@id='firstName']")
     LAST_NAME = (By.XPATH,"//input[@id='lastName']")
@@ -14,9 +14,9 @@ class Locators:
 
 
 class LoginInfo:
-    firstname = "Sathya"
-    lastname  = "P"
-    username = "psathya"
-    password = "Test@123"
+    firstname = "Jian"
+    lastname  = "Robert"
+    username = "jrobertqui"
+    password = "Test@321Test"
     confirm_password = password
 

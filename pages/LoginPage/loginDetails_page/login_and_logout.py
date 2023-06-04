@@ -1,22 +1,21 @@
 import logging
+import time
 
 from selenium.webdriver.common.keys import Keys
 
-from lib.wait_utils import BroweserWait
-from pages.portal import Portal
 
-from pages.LoginPage.locators import Locators, LoginInfo
+from pages.portal import Portal
+from pages.LoginPage.locators import LoginLocators, LoginInfo
 
 
 log = logging.getLogger(__name__)
 
 class LoginPage(Portal):
+    """This class contains functionality of the testcases """
 
-    def __init__(self, driver):
-        self.driver = driver
-
-    def get_wait(self, element=None):
-        return BroweserWait(self.driver, element)
+    def __init__(self, browser):
+        self.browser = browser
+        self.portal = Portal(self.browser)
 
     def login(self):
         """
@@ -24,17 +23,21 @@ class LoginPage(Portal):
         """
         try:
             log.info(f"user login as {LoginInfo.username}")
-            username_field = self.get_wait(Locators.USERNAME).wait_for_clickable()
-            username_field.send_keys(LoginInfo.username)
-            password_field = self.get_wait(Locators.PASSWORD).wait_for_clickable()
-            password_field.send_keys(LoginInfo.password)
-            log.info(f"Click SingIn button")
-            self.get_wait(Locators.SIGNIN_BTN).wait_for_clickable()
-            self.driver.find_element(*Locators.SIGNIN_BTN).click()
-            return True
+            self.send_text(LoginLocators.USERNAME, LoginInfo.username)
+            self.send_text(LoginLocators.PASSWORD, LoginInfo.password)
+            log.info("Click SingIn button")
+            self.click(LoginLocators.SIGNIN_BTN)
+            if 'signin' in self.browser.current_url:
+                log.info(f"{self.browser.current_url}")
+                log.info('Invalid username and Password')
+                self.sign_up()
+            else:
+                log.info(f"Successfully login the App")
+            return self
         except Exception:
-            log.info("Username and Password is invalid, Please Enter valid credential Or Create a new account")
-            return False
+            log.info("Invalid username and Password, \
+                     Please Enter valid credential Or Create a new account")
+            return self
 
     def sign_up(self):
         """
@@ -42,25 +45,23 @@ class LoginPage(Portal):
         """
         try:
             log.info("Sign Up page")
-
-            signup = self.get_wait(Locators.SIGNUP_LINK_TEXT).wait_for_clickable()
+            signup = self.get_wait(LoginLocators.SIGNUP_LINK_TEXT).wait_for_clickable()
             signup.send_keys(Keys.ENTER)
 
-            firstname_field = self.get_wait(Locators.FIRST_NAME).wait_for_clickable()
-            firstname_field.send_keys(LoginInfo.firstname)
-            lastname = self.get_wait(Locators.LAST_NAME).wait_for_clickable()
-            lastname.send_keys(LoginInfo.lastname)
-            username = self.get_wait(Locators.USERNAME).wait_for_clickable()
-            username.send_keys(LoginInfo.username)
-            password = self.get_wait(Locators.PASSWORD).wait_for_clickable()
-            password.send_keys(LoginInfo.password)
-
-            confirm_pwd = self.get_wait(Locators.CONFIRM_PASSWORD).wait_for_clickable()
-            confirm_pwd.send_keys(LoginInfo.confirm_password)
+            log.info("Enter signup details")
+            self.send_text(LoginLocators.FIRST_NAME, LoginInfo.firstname)
+            self.send_text(LoginLocators.LAST_NAME, LoginInfo.lastname)
+            self.send_text(LoginLocators.USERNAME, LoginInfo.username)
+            self.send_text(LoginLocators.PASSWORD, LoginInfo.password)
+            self.send_text(LoginLocators.CONFIRM_PASSWORD, LoginInfo.confirm_password)
             log.info("Click Sign up sumbit button")
-            self.get_wait(Locators.SIGNUP_SUBMIT_BTN).wait_for_clickable()
-            self.driver.find_element(*Locators.SIGNUP_SUBMIT_BTN).click()
-            return True
+            self.click(LoginLocators.SIGNUP_SUBMIT_BTN)
+            log.info(f"Successfully created a new account- username: {LoginInfo.username}")
+            if 'signin' in self.browser.current_url:
+                self.login()
+            else:
+                log.info(f"worng page. Expected Page : {self.browser.current_url}")
+            return self
 
         except:
             log.info("Unable to create a account")
@@ -69,8 +70,12 @@ class LoginPage(Portal):
         """
         Logout the Application
         """
-        log.info("Logout")
-        self.click(Locators.LOGOUT)
+        log.info("Click Logout")
+        self.click(LoginLocators.LOGOUT)
+        if 'signin' in self.browser.current_url:
+            log.info("Successfully Logout the App")
+        else:
+            log.info("Unable to Logout the App")
 
 
 

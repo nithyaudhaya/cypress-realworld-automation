@@ -14,3 +14,7 @@ class BroweserWait:
     def wait_for_clickable(self, time=30):
         wait = WebDriverWait(self.browser, time)
         return wait.until(EC.element_to_be_clickable(self.element))
+
+    def wait_for_displayed(self, time=30):
+        wait = WebDriverWait(self.browser, time)
+        return wait.until(EC.visibility_of_element_located(self.element))
