@@ -12,11 +12,3 @@ class LoginLocators:
     SIGNUP_SUBMIT_BTN = (By.XPATH,"//button[@data-test='signup-submit']")
     LOGOUT = (By.XPATH, "//div[@data-test='sidenav-signout']")
 
-
-class LoginInfo:
-    firstname = "Jian"
-    lastname  = "Robert"
-    username = "jrobertqui"
-    password = "Test@321Test"
-    confirm_password = password
-

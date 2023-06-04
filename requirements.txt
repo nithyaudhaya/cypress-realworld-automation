@@ -1,3 +1,5 @@
 pytest==6.2.5
+allure-pytest==2.9.45
+allure-python-commons==2.9.45
 selenium
 urllib3==1.26.7 #to handle Openssl

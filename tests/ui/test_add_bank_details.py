@@ -1,10 +1,12 @@
 import logging
+import allure
 
 from pages.HomePage.popup.add_bank_details import HomePopupPage
 from pages.LoginPage.loginDetails_page.login_and_logout import LoginPage
 
 log = logging.getLogger(__name__)
 
+@allure.severity(allure.severity_level.NORMAL)
 class TestStartRealWorld:
     """ This class contains create account details of real wolrd app"""
 

@@ -1,11 +1,13 @@
 import logging
-import time
+import allure
 
+from allure_commons.types import AttachmentType
 from selenium.webdriver.common.keys import Keys
 
 
 from pages.portal import Portal
-from pages.LoginPage.locators import LoginLocators, LoginInfo
+from pages.LoginPage.locators import LoginLocators
+from config.constant import Cypressconfig
 
 
 log = logging.getLogger(__name__)
@@ -22,9 +24,9 @@ class LoginPage(Portal):
         Login the Application
         """
         try:
-            log.info(f"user login as {LoginInfo.username}")
-            self.send_text(LoginLocators.USERNAME, LoginInfo.username)
-            self.send_text(LoginLocators.PASSWORD, LoginInfo.password)
+            log.info(f"user login as {Cypressconfig.username}")
+            self.send_text(LoginLocators.USERNAME, Cypressconfig.username)
+            self.send_text(LoginLocators.PASSWORD, Cypressconfig.password)
             log.info("Click SingIn button")
             self.click(LoginLocators.SIGNIN_BTN)
             if 'signin' in self.browser.current_url:
@@ -37,6 +39,8 @@ class LoginPage(Portal):
         except Exception:
             log.info("Invalid username and Password, \
                      Please Enter valid credential Or Create a new account")
+            allure.attach(self.browser.get_screenshot_as_png(), name="testLoginScreen",
+                          attachment_type=AttachmentType.PNG)
             return self
 
     def sign_up(self):
@@ -49,18 +53,20 @@ class LoginPage(Portal):
             signup.send_keys(Keys.ENTER)
 
             log.info("Enter signup details")
-            self.send_text(LoginLocators.FIRST_NAME, LoginInfo.firstname)
-            self.send_text(LoginLocators.LAST_NAME, LoginInfo.lastname)
-            self.send_text(LoginLocators.USERNAME, LoginInfo.username)
-            self.send_text(LoginLocators.PASSWORD, LoginInfo.password)
-            self.send_text(LoginLocators.CONFIRM_PASSWORD, LoginInfo.confirm_password)
+            self.send_text(LoginLocators.FIRST_NAME, Cypressconfig.firstname)
+            self.send_text(LoginLocators.LAST_NAME, Cypressconfig.lastname)
+            self.send_text(LoginLocators.USERNAME, Cypressconfig.username)
+            self.send_text(LoginLocators.PASSWORD, Cypressconfig.password)
+            self.send_text(LoginLocators.CONFIRM_PASSWORD, Cypressconfig.confirm_password)
             log.info("Click Sign up sumbit button")
             self.click(LoginLocators.SIGNUP_SUBMIT_BTN)
-            log.info(f"Successfully created a new account- username: {LoginInfo.username}")
+            log.info(f"Successfully created a new account- username: {Cypressconfig.username}")
             if 'signin' in self.browser.current_url:
                 self.login()
             else:
                 log.info(f"worng page. Expected Page : {self.browser.current_url}")
+                allure.attach(self.browser.get_screenshot_as_png(), name="testSignUpScreen",
+                          attachment_type=AttachmentType.PNG)
             return self
 
         except:
@@ -76,6 +82,8 @@ class LoginPage(Portal):
             log.info("Successfully Logout the App")
         else:
             log.info("Unable to Logout the App")
+            allure.attach(self.browser.get_screenshot_as_png(), name="testLogoutScreen",
+                          attachment_type=AttachmentType.PNG)
 
 
 
