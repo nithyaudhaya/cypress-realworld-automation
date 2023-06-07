@@ -2,6 +2,7 @@ import time
 import logging
 
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException, \
     ElementNotInteractableException, ElementClickInterceptedException
 
@@ -37,5 +38,12 @@ class Portal:
         self.browser.find_element(*locator).send_keys(Keys.CONTROL + 'a')
         self.browser.find_element(*locator).send_keys(Keys.DELETE)
         self.browser.find_element(*locator).send_keys(value)
+
+    def is_element_present(self, element):
+        try:
+            self.browser.find_element(*element)
+            return True
+        except NoSuchElementException:
+            return False
 
 

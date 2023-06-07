@@ -20,8 +20,11 @@ class HomePopupPage(Portal):
         self.LoginPage = LoginPage(self.browser)
 
     def add_bank_acct_details(self):
-        try:
-            self.get_wait(AddBankDetails.REAL_WORLD_APP_POPUP_HEADER).wait_for_displayed()
+        """
+        This function for check and Add bank account details
+        """
+        element = self.is_element_present(AddBankDetails.REAL_WORLD_APP_POPUP_HEADER)
+        if element:
             try:
                 log.info("Add account details")
                 log.info("Click Next button")
@@ -37,8 +40,7 @@ class HomePopupPage(Portal):
                 return self
             except Exception as e:
                 log.info(e)
-
-        except Exception as e:
+        else:
             log.info("Account details are alreday added")
             self.LoginPage.logout()
             return self

@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+
 class ConfigURLdetails:
     URL = "http://localhost:3000/"
 
