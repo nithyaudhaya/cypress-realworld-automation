@@ -1,5 +1,5 @@
 # cypress-realworld-automation
-Required Python 3.X version
+Required Python version above 3.7
 
 
 For getting web application:
